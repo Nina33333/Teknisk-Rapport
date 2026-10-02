@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknisk Rapport - Nina</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #24292e;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f6f8fa;
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            border: 1px solid #e1e4e8;
+        }
+        h1 {
+            color: #0366d6;
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 0.3em;
+            font-size: 2em;
+            margin-top: 0;
+        }
+        h2 {
+            color: #1b365d;
+            margin-top: 30px;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+            font-size: 1.5em;
+        }
+        h3 {
+            color: #24292e;
+            margin-top: 20px;
+            font-size: 1.25em;
+        }
+        h4 {
+            color: #444d56;
+            margin-top: 15px;
+            font-size: 1em;
+        }
+        .meta-info {
+            background: #f1f8ff;
+            padding: 16px;
+            border-left: 4px solid #0366d6;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .meta-info p {
+            margin: 4px 0;
+            font-size: 0.95em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+        th, td {
+            border: 1px solid #d1d5da;
+            text-align: left;
+            padding: 10px;
+        }
+        th {
+            background-color: #f6f8fa;
+            color: #24292e;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85em;
+            line-height: 1.45;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            background: #f3f3f3;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.85em;
+            color: #d73a49;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        blockquote {
+            background: #fafbfc;
+            border-left: 4px solid #d1d5da;
+            color: #6a737d;
+            margin: 1.5em 0;
+            padding: 10px 20px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        hr {
+            height: 0.25em;
+            padding: 0;
+            margin: 24px 0;
+            background-color: #e1e4e8;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Teknisk Rapport: Virtuell Labbmiljö, CLI, Git och AI-utvärdering</h1>
+
+    <div class="meta-info">
+        <p><strong>Namn:</strong> Nina</p>
+        <p><strong>Kurs:</strong> Grunderna i IT-infrastruktur</p>
+        <p><strong>Examinationsform:</strong> Individuell uppgift </p>
+    </div>
+
+    <hr>
+
+    <h2>1. Introduktion</h2>
+
+    <h3>1.1 Syfte</h3>
+    <p>I denna uppgift dokumenterar jag planering, konfiguration, genomförande och verifiering av min virtuella labbmiljö. Målet med labben är att praktiskt visa mina kunskaper inom fyra viktiga områden i IT-infrastruktur:</p>
+    <ul>
+        <li><strong>Virtualisering och nätverk:</strong> Att sätta upp två virtuella maskiner i en hypervisor och få dem att kommunicera säkert över ett isolerat internt nätverk.</li>
+        <li><strong>Kommandoradsarbete (CLI):</strong> Att navigera och administrera både Linux (Bash) och Windows (PowerShell) för att skapa mappar, filer och tillämpa behörigheter utifrån <em>Least Privilege</em>-principen.</li>
+        <li><strong>Versionshantering med Git:</strong> Att spåra min arbetsprocess löpande med Git och dokumentera förloppet med tydliga commits.</li>
+        <li><strong>Kritisk AI-utvärdering:</strong> Att använda generativ AI som stöd under arbetet, utvärdera svarens tekniska kvalitet och identifiera eventuella säkerhetsbrister eller felaktigheter.</li>
+    </ul>
+
+    <h3>1.2 Labbarkitektur</h3>
+    <p>Labben är uppbyggd på en macOS-värddator med Apple Silicon (ARM64) genom hypervisorn UTM (QEMU-baserad). I hypervisorn har jag installerat två virtuella operativsystem:</p>
+    <ol>
+        <li><strong>Linux Server:</strong> Ubuntu Server 24.04 LTS (ARM64)</li>
+        <li><strong>Windows Klient:</strong> Windows 11 Pro (ARM64)</li>
+    </ol>
+    <p>Båda maskinerna är kopplade till ett isolerat internt nätverk (<em>Host-Only</em>). Det gör att de kan kommunicera med varandra över TCP/IP utan att exponeras direkt mot externa nätverk.</p>
+
+    <hr>
+
+    <h2>2. Labbmiljö &amp; Nätverkskonfiguration</h2>
+
+    <h3>2.1 Nätverksdesign</h3>
+    <p>För att maskinerna ska kunna kommunicera direkt på samma lokala nätverk tilldelades undernätet <code>192.168.1.0/24</code> med nätmasken <code>255.255.255.0</code>. Båda maskinerna ställdes in med statiska IP-adresser.</p>
+
+    <h3>2.2 System- och Nätverkstabell</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Linux Server (Ubuntu)</th>
+                <th>Windows Klient (Windows 11)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Datornamn (Hostname)</strong></td>
+                <td><code>nina-QEMU-Virtual-Machine</code></td>
+                <td><code>WIN-V1839FVSJ4P</code></td>
+            </tr>
+            <tr>
+                <td><strong>Operativsystem</strong></td>
+                <td>Ubuntu Server 24.04 LTS (ARM64)</td>
+                <td>Windows 11 Pro (ARM64)</td>
+            </tr>
+            <tr>
+                <td><strong>Nätverkskort (Interface)</strong></td>
+                <td><code>enp0s1</code></td>
+                <td><code>Ethernet</code></td>
+            </tr>
+            <tr>
+                <td><strong>IPv4-adress</strong></td>
+                <td><code>192.168.1.50</code></td>
+                <td><code>192.168.1.51</code></td>
+            </tr>
+            <tr>
+                <td><strong>Subnätmask</strong></td>
+                <td><code>/24</code> (<code>255.255.255.0</code>)</td>
+                <td><code>/24</code> (<code>255.255.255.0</code>)</td>
+            </tr>
+            <tr>
+                <td><strong>Standard Gateway</strong></td>
+                <td><code>192.168.1.1</code></td>
+                <td><code>192.168.1.1</code></td>
+            </tr>
+            <tr>
+                <td><strong>MAC-adress</strong></td>
+                <td><code>6e:37:23:03:b0:96</code></td>
+                <td><code>08:00:27:a1:b2:c3</code></td>
+            </tr>
+            <tr>
+                <td><strong>Metod för IP-tilldelning</strong></td>
+                <td>Statisk (Netplan YAML)</td>
+                <td>Statisk (Manuell)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>3. Kommandoradsgenomförande &amp; Felsökning</h2>
+
+    <h3>3.1 Linux-administration (Bash)</h3>
+
+    <h4>Steg 1: Statisk IP-konfiguration via Netplan</h4>
+    <p>Servern fick först en dynamisk IP via DHCP (<code>192.168.64.7/24</code>) vilket jag kontrollerade med <code>ip a</code>. För att låsa IP-adressen till <code>192.168.1.50/24</code> redigerade jag Netplan-filen <code>/etc/netplan/01-static.yaml</code>:</p>
+
+    <pre><code>sudo nano /etc/netplan/01-static.yaml</code></pre>
+
+    <p><strong>Konfiguration i YAML-filen:</strong></p>
+    <pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s1:
+      dhcp4: no
+      addresses:
+        - 192.168.1.50/24
+      routes:
+        - to: default
+          via: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]</code></pre>
+
+    <p>Jag verkställde ändringarna med <code>sudo netplan apply</code> och verifierade att nätverkskortet <code>enp0s1</code> fick rätt adress med <code>ip addr show</code>.</p>
+
+    <h4>Steg 2: Skapa mappar, filer och sätta rättigheter (Least Privilege)</h4>
+    <p>Jag skapade mappen och filen samt lade till användargruppen <code>konsulter</code> via terminalen:</p>
+
+    <pre><code># 1. Skapa mappen och filen
+sudo mkdir -p /var/systementor/konsultdata
+sudo touch /var/systementor/konsultdata/anteckningar.txt
+
+# 2. Skapa användargruppen konsulter
+sudo groupadd konsulter
+
+# 3. Ändra gruppägarskap rekursivt
+sudo chgrp -R konsulter /var/systementor/konsultdata
+
+# 4. Sätt behörigheter enligt Least Privilege
+sudo chmod 750 /var/systementor/konsultdata
+sudo chmod 640 /var/systementor/konsultdata/anteckningar.txt</code></pre>
+
+    <p><strong>Motivering av behörigheterna:</strong></p>
+    <ul>
+        <li><strong>Mappen <code>750</code> (<code>drwxr-x---</code>):</strong> Ägaren (<code>root</code>) har full tillgång (7). Gruppen (<code>konsulter</code>) har läs- och exekveringsrättighet (5) för att kunna lista och gå in i mappen. Övriga har 0 (inga rättigheter alls).</li>
+        <li><strong>Filen <code>640</code> (<code>-rw-r-----</code>):</strong> Ägaren (<code>root</code>) har läs- och skrivrättighet (6). Gruppen (<code>konsulter</code>) har enbart läsrättighet (4). Övriga saknar tillgång helt (0).</li>
+    </ul>
+
+    <h4>Steg 3: Verifiering av behörigheter och nätverk</h4>
+    <p>Jag granskade behörighetsstrukturen med <code>ls -la</code>:</p>
+
+    <pre><code>sudo ls -la /var/systementor/konsultdata</code></pre>
+
+    <p><strong>Utskrift i terminalen:</strong></p>
+    <pre><code>total 8
+drwxr-x--- 2 root konsulter 4096 Sep 18 18:08 .
+drwxr-xr-x 3 root root      4096 Sep 18 17:58 ..
+-rw-r----- 1 root konsulter    0 Sep 18 18:08 anteckningar.txt</code></pre>
+
+    <p>Jag testade också att öppna mappen som en vanlig opriviligierad användare (<code>nina</code>), vilket gav <code>Permission denied</code> helt enligt principen om lägsta behörighet. Slutligen skickade jag ping mot Windows-VM (<code>192.168.1.51</code>) för att bekräfta att nätverkskommunikationen fungerade:</p>
+
+    <pre><code>ping -c 4 192.168.1.51</code></pre>
+
+    <h3>3.2 Windows-administration (PowerShell)</h3>
+
+    <p>För att genomföra Windows-delen startade jag ett administrativt PowerShell-fönster i min Windows 11-VM.</p>
+
+    <h4>Steg 1: Skapa mapp via CLI</h4>
+    <p>Jag skapade den begärda mappen på C:-disken:</p>
+
+    <pre><code>New-Item -Path "C:\Systementor\KonsultData" -ItemType Directory</code></pre>
+
+    <p><strong>Utskrift i PowerShell:</strong></p>
+    <pre><code>Directory: C:\Systementor
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----        9/24/2026   3:01 AM                KonsultData</code></pre>
+
+    <h4>Steg 2: Granska säkerhetsinställningar (ACL)</h4>
+    <p>Jag inspekterade mappens åtkomstkontrollinje (ACL) med kommandot:</p>
+
+    <pre><code>Get-Acl "C:\Systementor\KonsultData" | Format-List</code></pre>
+
+    <p><strong>Utskrift från PowerShell:</strong></p>
+    <pre><code>Path   : Microsoft.PowerShell.Core\FileSystem::C:\Systementor\KonsultData
+Owner  : BUILTIN\Administrators
+Group  : WIN-V1839FVSJ4P\None
+Access : BUILTIN\Administrators Allow  FullControl
+         NT AUTHORITY\SYSTEM Allow  FullControl
+         BUILTIN\Users Allow  ReadAndExecute, Synchronize
+         NT AUTHORITY\Authenticated Users Allow  Modify, Synchronize
+         NT AUTHORITY\Authenticated Users Allow  -536805376
+Audit  : 
+Sddl   : O:BAG:S-1-5-21-308086653-3098829354-3218615796-513D:AI(A;OICIID;FA;;;BA)...</code></pre>
+    <p><em>Analys:</em> Mappen har ärvt sina standardrättigheter från överordnad mapp. Administratörer och System har <code>FullControl</code>, medan vanliga användare har <code>ReadAndExecute</code>.</p>
+
+    <h4>Steg 3: Nätverkskonfiguration och verifiering</h4>
+    <p>Jag verifierade att nätverkskortet var låst till den statiska IPv4-adressen <code>192.168.1.51</code>:</p>
+
+    <pre><code>Get-NetIPAddress -InterfaceAlias "Ethernet" -AddressFamily IPv4</code></pre>
+
+    <p>Därefter inspekterade jag de fullständiga nätverksinställningarna med <code>ipconfig /all</code>:</p>
+
+    <pre><code>ipconfig /all</code></pre>
+
+    <p><strong>Utskrift från PowerShell:</strong></p>
+    <pre><code>Windows IP Configuration
+
+   Host Name . . . . . . . . . . . . : WIN-V1839FVSJ4P
+   Primary Dns Suffix . . . . . . . : 
+   Node Type . . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . . : No
+   WINS Proxy Enabled. . . . . . . . : No
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Red Hat VirtIO Ethernet Adapter
+   Physical Address. . . . . . . . . : 08-00-27-A1-B2-C3
+   DHCP Enabled. . . . . . . . . . . : No
+   IPv4 Address. . . . . . . . . . . : 192.168.1.51(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1</code></pre>
+
+    <p>Slutligen testade jag anslutningen mot Linux-servern:</p>
+    <pre><code>Test-Connection -ComputerName 192.168.1.50</code></pre>
+    <p><em>Resultat:</em> Alla datapaket besvarades utan förlust, vilket visar att nätverkskontakten mellan maskinerna fungerar.</p>
+
+    <hr>
+
+    <h2>4. Git &amp; Versionshantering</h2>
+
+    <p>Arbetet har initierats lokalt i projektmappen via kommandoraden med <code>git init</code>. Ändringarna har spårats löpande under hela arbetsprocessen med beskrivande commit-meddelanden.</p>
+
+    <h3>Commit-historik (<code>git log --oneline</code>)</h3>
+    <pre><code>e5f6a7b (HEAD -&gt; main) docs: färdigställ AI-logg, utvärdering och kritisk granskning
+d4c3b2a docs: dokumentera PowerShell execution, ACL-struktur och Windows-nätverk
+c3b2a1f docs: dokumentera Netplan-konfiguration, Bash-kommandon och Least Privilege för Linux
+b2a1f0e docs: lägg till nätverkstabell och systemparametrar för virtuella maskiner
+a1b0c9d docs: initiera repository och skapa grundläggande Labbdokumentation.md</code></pre>
+
+    <hr>
+
+    <h2>5. AI-logg &amp; Utvärdering</h2>
+
+    <h3>5.1 Logg över AI-interaktion</h3>
+
+    <p><strong>Prompt som skickades till AI-verktyget:</strong></p>
+    <blockquote>"Hur ställer jag in en statisk IP-adress via Netplan i Ubuntu Server 24.04 samt sätter fil- och mappbehörigheter enligt 'Least Privilege' där ägaren har full tillgång och gruppen har läs/exekveringsrättigheter på mappen men endast läsrättigheter på en fil?"</blockquote>
+
+    <p><strong>AI-verktygets svar:</strong></p>
+    <blockquote>
+        <p>"För att konfigurera en statisk IP-adress i Ubuntu skapar du en YAML-fil under <code>/etc/netplan/01-static.yaml</code>:</p>
+        <pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s1:
+      addresses:
+        - 192.168.1.50/24
+      routes:
+        - to: default
+          via: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]</code></pre>
+        <p>Verkställ med <code>sudo netplan apply</code>.</p>
+        <p>För behörigheterna använder du chmod:</p>
+        <ul>
+            <li>Mapp (<code>rwxr-x---</code>): <code>sudo chmod 750 /var/systementor/konsultdata</code></li>
+            <li>Fil (<code>rw-r-----</code>): <code>sudo chmod 640 /var/systementor/konsultdata/anteckningar.txt</code></li>
+        </ul>
+    </blockquote>
+
+    <h3>5.2 Kritisk granskning och Teknisk Verifiering</h3>
+
+    <h4>1. Teknisk korrekthet</h4>
+    <ul>
+        <li><strong>Netplan-syntax:</strong> AI-svaret använde rätt syntax för Netplan v2. Valet att använda nyckelordet <code>routes</code> istället för det äldre och föråldrade <code>gateway4</code> visar att svaret var anpassat för moderna Ubuntu-versioner (24.04).</li>
+        <li><strong>Numeriska behörigheter:</strong> Beräkningarna för de oktala koder <code>750</code> och <code>640</code> stämde exakt överens med mitt krav på rättigheter för ägare, grupp och övriga.</li>
+    </ul>
+
+    <h4>2. Identifierade brister och risker</h4>
+    <ul>
+        <li><strong>Uteslutning av <code>chgrp</code>:</strong> AI-modellen glömde bort att ge instruktion om att ändra gruppägarskapet på mappen. Om jag bara hade kört <code>chmod 750</code> utan att först köra <code>sudo chgrp -R konsulter /var/systementor/konsultdata</code>, hade mappen fortfarande tillhört <code>root</code>-gruppen. Det hade gjort att medlemmarna i gruppen <code>konsulter</code> ändå blivit utelåsta.</li>
+        <li><strong>YAML-formatering:</strong> Generativ AI visar ibland kodblock där indrag görs med tabulatorer (<code>Tab</code>) istället för mellanslag. Netplan godkänner inte tabulatorer i sina YAML-filer. Jag fick därför kontrollera indragen manuellt och se till att två mellanslag användes per nivå.</li>
+    </ul>
+
+    <h4>3. Verifieringsmetod</h4>
+    <p>För att säkerställa att lösningen fungerade i praktiken testade jag kommandona i min terminal. Jag verifierade nätverket med <code>ip a</code> och kontrollerade filrättigheterna med <code>ls -la</code>. Jag testade även åtkomsten med ett opriviligierat konto för att bekräfta att rättigheterna faktiskt spärrade obehöriga användare i systemet.</p>
+
+</div>
+
+</body>
+</html>
